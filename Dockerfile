@@ -7,18 +7,17 @@ WORKDIR /app
 # Copy the package.json and package-lock.json files
 COPY package*.json ./
 
-# Clean npm cache and install project dependencies
-RUN npm cache clean --force
+# Install project dependencies
 RUN npm install
+
+# Install Angular CLI locally
+RUN npm install @angular/cli
 
 # Copy the entire project
 COPY . .
 
-# Clean any previous build artifacts
-RUN rm -rf node_modules
-
-# Build the Angular application
-RUN npm run build -- --output-path=dist
+# Build the Angular application using the locally installed Angular CLI
+RUN npx ng build --output-path=dist
 
 # Use a lightweight web server to serve the Angular app
 FROM nginx:alpine
