@@ -7,11 +7,15 @@ WORKDIR /app
 # Copy the package.json and package-lock.json files
 COPY package*.json ./
 
-# Install project dependencies
+# Clean npm cache and install project dependencies
+RUN npm cache clean --force
 RUN npm install
 
 # Copy the entire project
 COPY . .
+
+# Clean any previous build artifacts
+RUN rm -rf node_modules
 
 # Build the Angular application
 RUN npm run build -- --output-path=dist
